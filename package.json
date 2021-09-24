@@ -1,9 +1,9 @@
 {
   "name": "rollup-jest-boilerplate",
   "version": "1.0.1",
-  "main": "dist/rollup-jest-boilerplate.cjs.js",
-  "module": "dist/rollup-jest-boilerplate.esm.js",
-  "browser": "dist/rollup-jest-boilerplate.umd.js",
+  "main": "dist/query-string-parser.cjs.js",
+  "module": "dist/query-string-parser.esm.js",
+  "browser": "dist/query-string-parser.umd.js",
   "license": "MIT",
   "repository": {
     "type": "git",

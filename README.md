@@ -1,17 +1,37 @@
 # 📚 rollup-jest-boilerplate
 
-> Full featured boilerplate for building JavaScript libraries the modern way.
+# UDF Query Param Parser
+A slim URL parser for query params to javascript objects to be used in User Defined Functions.
 
-## Features
-- 📜 [Rollup.js](https://rollupjs.org/guide/en) configuration providing compatibility with different module systems (CommonJS, ECMAScript, UMD for `<script>` tags)
-- 🃏 [Jest](http://jestjs.io/) setup with watch mode working
-- 🛀 [Renovate](https://github.com/apps/renovate) configuration for auto updates (you have to activate it via https://github.com/apps/renovate)
-- 🐈 [Yarn](https://yarnpkg.com/) with lock file, [pinned](https://renovatebot.com/docs/dependency-pinning/) devDependencies and fixed Yarn version in .yarnrc using [Yarn policies](https://yarnpkg.com/lang/en/docs/cli/policies/)
-- ✅ [Travis CI](https://travis-ci.com/)
-- 🏗 [.nvmrc](https://github.com/creationix/nvm) file to enforce the Node.js version for contributors and continuous integration
-- ⚡️ Ready to publish and use
+# Usage
+The main use case is for parsing query params in a URL to a javascript object within a User Defined Function in BigQuery.
+This environment doesn't have access to any browser global objects like window, document, etc... So we have to make sure we are using only objectt/methods that are available in the without the browser.
 
-## How to use
+```js
+  var obj = urlQueryStringToObject(url)
+
+  // read the specs for cases that are supported
+  // In bigquery a JSON object is a string so we need to stringify it when using it in a user defined function
+```
+Example of usage in BigQuery
+```SQL
+CREATE OR REPLACE FUNCTION url_query_string_to_object(url STRING) 
+RETURNS STRING 
+LANGUAGE js AS r"""
+  return JSON.stringify(urlQueryStringToObject(url));
+"""
+OPTIONS (
+  library = ["gs://path-to-your-version-of-this-library/lib/url-query-string-to-object.js"]
+)
+
+SELECT 
+  *,
+  url_query_string_to_object(url) AS parsed_params
+FROM [your-table]
+```
+
+
+## How to use the boilerplate that built this library
 
 Decide of a new library name, let's say `new-super-library` (🤦🏼‍♀️), then in a terminal:
 
@@ -22,25 +42,7 @@ rm rollup-jest-boilerplate.zip
 mv rollup-jest-boilerplate-master new-super-library
 ```
 
-**Next steps:**
-- search the project for `rollup-starter-lib` and replace everywhere with `new-super-library`
-- start coding in [src/main.js](src/main.js)
-- profit 💸
 
-## Live examples
-
-Those examples are using the live published version of this boilerplate library on [npm](https://www.npmjs.com/rollup-jest-boilerplate) and they run with [CodeSandbox](https://codesandbox.io/).
-
-- [ECMAScript](https://codesandbox.io/s/7ojknnqjl6?module=%2Fsrc%2Findex.js)
-- [CommonJS](https://codesandbox.io/s/o5q018q609?module=%2Fsrc%2Findex.js)
-- [UMD](https://codesandbox.io/s/jyqqp21rv), this leverages [jsDelivr npm CDN](https://www.jsdelivr.com/features)
-
-## Developer environment requirements
-
-To run this project, you will need:
-
-- Node.js >= v10.5.0, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
-- Yarn >= v1.7.0 - [install instructions ("Alternatives" tab)](https://yarnpkg.com/en/docs/install#alternatives-rc)
 
 ## Running tests
 
@@ -72,14 +74,4 @@ npm publish
 
 ## Additional tooling
 
-Based on your need, you might want to add:
-- [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/)
-- [TypeScript](https://www.typescriptlang.org/) support
-- Monorepo support with [Lerna](https://lernajs.io/)
-- CHANGELOG.md generation with [conventional-changelog](https://github.com/conventional-changelog)
 
-If so, please do and open pull requests when you feel like it.
-
-## Original idea
-
-I initially used [rollup/rollup-starter-lib](https://github.com/rollup/rollup-starter-lib) but really needed that Jest support so I did it.

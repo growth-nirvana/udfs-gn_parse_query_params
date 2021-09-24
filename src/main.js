@@ -1,6 +1,14 @@
 const urlQueryStringToObject = (url) => {
   if (!url || url === '') return {};
 
+  const decodeQueryParam = (param) => {
+    try {
+      return decodeURIComponent(param.replace(/\+/g, ' '));
+    } catch (e) {
+      return param;
+    }
+  }
+
   const queryString = url.split('?')[1]; 
   const queryStringObject = {};
 
@@ -20,7 +28,7 @@ const urlQueryStringToObject = (url) => {
 
   queryStringArray.forEach((queryString) => {
     const queryStringArray = queryString.split('=');
-    queryStringObject[queryStringArray[0]] = decodeURIComponent(queryStringArray[1]);
+    queryStringObject[queryStringArray[0]] = decodeQueryParam(queryStringArray[1]);
   });
 
 
