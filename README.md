@@ -5,7 +5,7 @@ A slim URL parser for query params to javascript objects to be used in User Defi
 
 # Usage
 The main use case is for parsing query params in a URL to a javascript object within a User Defined Function in BigQuery.
-This environment doesn't have access to any browser global objects like window, document, etc... So we have to make sure we are using only objectt/methods that are available in the without the browser.
+This environment doesn't have access to any browser global objects like window, document, etc... So we have to make sure we are using only objects/methods that are available in the without the browser.
 
 ```js
   var obj = urlQueryStringToObject(url)
